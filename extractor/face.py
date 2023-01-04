@@ -8,7 +8,7 @@ from data import load_frame, show_frame, save_frame
 
 def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
     """Extract a list of `(x,y,w,h)`."""
-    # pylint: disable=no-member (Pylint cannot find any members within cv2.)
+    # pylint: disable=no-member
 
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     classifier = cv2.CascadeClassifier(path.join(ROOT, 'face_model.xml'))
@@ -22,7 +22,7 @@ def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
 
 
 def _head_mask(faces: List[Tuple[int, int, int, int]], height: int, width: int, radius_factor: float) -> np.array:
-    # pylint: disable=no-member (Pylint cannot find any members within cv2.)
+    # pylint: disable=no-member
     mask = np.zeros((height, width, 3))
     for (x, y, w, h) in faces:
         center = (int(x + 0.5*w), int(y + 0.4*h))
