@@ -2,6 +2,7 @@ import numpy as np
 from typing import List, Tuple
 from data import load_frame
 from colorsys import rgb_to_hsv
+from image import apply_mask
 
 
 def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, float]]:
@@ -17,7 +18,7 @@ def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, fl
         List of `(hue, saturation, value)` of length #(pixels included in the mask).
     """
 
-    frame = np.where(mask > 127, frame, np.zeros_like(frame))
+    frame = apply_mask(frame, mask)
 
     height = frame.shape[0]
     width = frame.shape[1]

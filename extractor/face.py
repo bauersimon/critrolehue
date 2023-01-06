@@ -4,6 +4,7 @@ from typing import List, Tuple
 from paths import ROOT
 from os import path
 from data import load_frame, show_frame, save_frame
+from image import subtract_mask
 
 
 def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
@@ -44,7 +45,6 @@ def remove_heads_from_mask(frame: np.array, mask: np.array, head_radius=0.8) -> 
     width = frame.shape[1]
     head_mask = _head_mask(faces, height, width, head_radius)
 
-    mask = mask - head_mask
-    mask = np.where(mask >= 0, mask, np.zeros_like(mask))
+    return subtract_mask(mask, head_mask)
 
     return mask
