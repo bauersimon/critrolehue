@@ -49,12 +49,20 @@ _formats = {
 class YouTubeVideo(FrameGenerator):
     _url: str
     _format: str
+    length: float
 
     def __init__(self, url: str, quality: str = 'hd'):
         self._url = url
         self._format = _formats[quality]
 
+        with YoutubeDL({"quiet": True}) as yt:
+            info = yt.extract_info(url, download=False)
+            self.length = float(info["duration"])
+
     def get_frame(self, second: float) -> np.array:
+        if second > self.length - 0.1:
+            return None
+
         def section(*args, **kwargs): return [{
             "start_time": second - 0.1,
             "end_time": second + 0.1,
