@@ -108,3 +108,6 @@ class TestYouTubeVideo(unittest.TestCase):
             5.0,
             path.join(TESTING, "youtube_fullhd.png"),
         )
+
+if __name__ == "__main__":
+    unittest.main()

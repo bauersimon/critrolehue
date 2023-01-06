@@ -23,3 +23,6 @@ class TestHeadMask(unittest.TestCase):
         expected = load_frame(path.join(TESTING, "night_0_5_mask.png"))
 
         nptest.assert_equal(actual, expected)
+
+if __name__ == "__main__":
+    unittest.main()

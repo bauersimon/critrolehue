@@ -32,3 +32,6 @@ class TestGetFrame(unittest.TestCase):
             2.0,
             path.join(TESTING, "night_2_0.png"),
         )
+
+if __name__ == "__main__":
+    unittest.main()

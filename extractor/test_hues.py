@@ -28,3 +28,6 @@ class TestExtractColor(unittest.TestCase):
             path.join(TESTING, "mask_windows.png"),
             (0.59, 0.63, 0.82),  # Blue of the windows.
         )
+
+if __name__ == "__main__":
+    unittest.main()
