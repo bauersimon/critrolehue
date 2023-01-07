@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from data import load_frame, get_frame
-from typing import Dict
+from data import load_frame, get_frame, video_length
+from typing import Dict, Tuple
 from yt_dlp import YoutubeDL
 from tempfile import TemporaryDirectory
 from os import path
@@ -13,16 +13,47 @@ class FrameGenerator(ABC):
         """Obtain a frame at a certain time point."""
         pass
 
+    @property
+    @abstractmethod
+    def length(self) -> float:
+        pass
+
+
+class FrameIterator():
+    _generator: FrameGenerator
+    _stepsize: float
+
+    def __init__(self, gen: FrameGenerator, stepsize: float = 1.0) -> None:
+        self._generator = gen
+        self._stepsize = stepsize
+
+    def __len__(self):
+        # Inlcuding 0.0 for the length.
+        return int(self._generator.length / self._stepsize) + 1
+
+    def __getitem__(self, key) -> Tuple[float, np.array]:
+        time = key * self._stepsize
+        if time > self._generator.length:
+            raise IndexError
+        frame = self._generator.get_frame(time)
+        return (time, frame)
+
 
 class VideoFile(FrameGenerator):
     _file: str
+    _length: float
 
     def __init__(self, file: str):
         self._file = file
+        self._length = video_length(file)
 
     def get_frame(self, second: float) -> np.array:
         """Obtain a frame at a certain time point."""
         return get_frame(self._file, second)
+
+    @property
+    def length(self) -> float:
+        return self._length
 
 
 class ImageFiles(FrameGenerator):
@@ -38,6 +69,10 @@ class ImageFiles(FrameGenerator):
             raise Exception(f"no frame for {second}s")
         return load_frame(file)
 
+    @property
+    def length(self) -> float:
+        return max(self._files.keys())
+
 
 _formats = {
     "sd": "396",
@@ -49,7 +84,7 @@ _formats = {
 class YouTubeVideo(FrameGenerator):
     _url: str
     _format: str
-    length: float
+    _length: float
 
     def __init__(self, url: str, quality: str = 'hd'):
         self._url = url
@@ -57,10 +92,10 @@ class YouTubeVideo(FrameGenerator):
 
         with YoutubeDL({"quiet": True}) as yt:
             info = yt.extract_info(url, download=False)
-            self.length = float(info["duration"])
+            self._length = float(info["duration"])
 
     def get_frame(self, second: float) -> np.array:
-        if second > self.length - 0.1:
+        if second > self._length - 0.1:
             return None
 
         def section(*args, **kwargs): return [{
@@ -83,3 +118,7 @@ class YouTubeVideo(FrameGenerator):
             yt.download([self._url])
 
             return get_frame(path.join(temp, "download.mp4"), 0.1)
+
+    @property
+    def length(self) -> float:
+        return self._length

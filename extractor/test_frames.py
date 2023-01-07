@@ -1,6 +1,6 @@
 import unittest
 from data import load_frame
-from frames import VideoFile, ImageFiles, YouTubeVideo
+from frames import VideoFile, ImageFiles, YouTubeVideo, FrameIterator
 from numpy import testing as nptest
 from os import path
 from paths import TESTING
@@ -108,6 +108,37 @@ class TestYouTubeVideo(unittest.TestCase):
             5.0,
             path.join(TESTING, "youtube_fullhd.png"),
         )
+
+
+class TestFrameGenerator(unittest.TestCase):
+    def test_video_1_0(self):
+        video = VideoFile(path.join(TESTING, "night.mp4"))
+        iterator = FrameIterator(video, 1.0)
+        frames = []
+        for f in iterator:
+            frames.append(f)
+
+        nptest.assert_equal(frames[0][1], load_frame(
+            path.join(TESTING, "night_0_0.png")))
+        nptest.assert_equal(frames[2][1], load_frame(
+            path.join(TESTING, "night_2_0.png")))
+
+        self.assertEqual(int(video.length) + 1, len(iterator))
+
+    def test_video_2_0(self):
+        video = VideoFile(path.join(TESTING, "night.mp4"))
+        iterator = FrameIterator(video, 2.0)
+        frames = []
+        for f in iterator:
+            frames.append(f)
+
+        nptest.assert_equal(frames[0][1], load_frame(
+            path.join(TESTING, "night_0_0.png")))
+        nptest.assert_equal(frames[1][1], load_frame(
+            path.join(TESTING, "night_2_0.png")))
+
+        self.assertEqual(int(video.length/2) + 1, len(iterator))
+
 
 if __name__ == "__main__":
     unittest.main()
