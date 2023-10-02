@@ -21,6 +21,7 @@ def get_frame(file: str, second: float) -> np.array:
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     return np.array(frame)
 
+
 def video_length(file: str) -> float:
     # pylint: disable=no-member
     video = cv2.VideoCapture(file)

@@ -1,10 +1,12 @@
 import unittest
-from data import load_frame
-from frames import VideoFile, ImageFiles, YouTubeVideo, FrameIterator
-from numpy import testing as nptest
 from os import path
-from paths import TESTING
 from typing import Dict
+
+from extractor.data import load_frame
+from extractor.frames import FrameIterator, ImageFiles, VideoFile, YouTubeVideo
+from numpy import testing as nptest
+
+from .paths import TESTING
 
 
 class TestVideoFile(unittest.TestCase):

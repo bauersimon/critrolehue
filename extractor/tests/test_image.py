@@ -1,8 +1,11 @@
 import unittest
-from paths import TESTING, FRAMES
 from os import path
-from image import similar_image
-from data import load_frame
+
+from extractor.data import load_frame
+from extractor.image import similar_image
+from extractor.paths import FRAMES
+
+from .paths import TESTING
 
 
 class TestSimilarImage(unittest.TestCase):

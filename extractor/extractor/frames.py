@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
-import numpy as np
-from data import load_frame, get_frame, video_length
-from typing import Dict, Tuple
-from yt_dlp import YoutubeDL
-from tempfile import TemporaryDirectory
 from os import path
+from tempfile import TemporaryDirectory
+from typing import Dict, Tuple
+
+import numpy as np
+from yt_dlp import YoutubeDL
+
+from .data import get_frame, load_frame, video_length
 
 
 class FrameGenerator(ABC):

@@ -1,8 +1,10 @@
-import numpy as np
-from typing import List, Tuple
-from data import load_frame
 from colorsys import rgb_to_hsv
-from image import apply_mask
+from typing import List, Tuple
+
+import numpy as np
+
+from .data import load_frame
+from .image import apply_mask
 
 
 def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, float]]:

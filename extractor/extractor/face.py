@@ -1,10 +1,12 @@
+from os import path
+from typing import List, Tuple
+
 import cv2
 import numpy as np
-from typing import List, Tuple
-from paths import ROOT
-from os import path
-from data import load_frame, show_frame, save_frame
-from image import subtract_mask
+
+from .data import load_frame, save_frame, show_frame
+from .image import subtract_mask
+from .paths import ROOT
 
 
 def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:

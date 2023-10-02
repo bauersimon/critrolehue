@@ -2,7 +2,12 @@
 
 Sync Philips Hue with the Critical Role set lighting.
 
+## Components
+
+- `extractor` written in `python`
+
 ## Requirements
 
-- see `extractor/requirements.txt`
-- `ffmpeg`
+- `extractor`
+    - see `extractor/requirements.txt`
+    - `ffmpeg`

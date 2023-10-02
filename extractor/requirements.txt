@@ -3,3 +3,6 @@ numpy
 matplotlib
 yt-dlp
 sewar
+
+autopep8
+isort

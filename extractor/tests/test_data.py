@@ -1,8 +1,10 @@
 import unittest
-from data import get_frame, load_frame
-from numpy import testing as nptest
 from os import path
-from paths import TESTING
+
+from extractor.data import get_frame, load_frame
+from numpy import testing as nptest
+
+from .paths import TESTING
 
 
 class TestGetFrame(unittest.TestCase):
@@ -32,6 +34,7 @@ class TestGetFrame(unittest.TestCase):
             2.0,
             path.join(TESTING, "night_2_0.png"),
         )
+
 
 if __name__ == "__main__":
     unittest.main()

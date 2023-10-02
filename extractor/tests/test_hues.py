@@ -1,8 +1,10 @@
 import unittest
-from hues import extract_color
-from data import load_frame
-from paths import TESTING
 from os import path
+
+from extractor.data import load_frame
+from extractor.hues import extract_color
+
+from .paths import TESTING
 
 
 class TestExtractColor(unittest.TestCase):
@@ -28,6 +30,7 @@ class TestExtractColor(unittest.TestCase):
             path.join(TESTING, "mask_windows.png"),
             (0.59, 0.63, 0.82),  # Blue of the windows.
         )
+
 
 if __name__ == "__main__":
     unittest.main()

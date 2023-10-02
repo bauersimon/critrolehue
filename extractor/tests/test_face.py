@@ -1,9 +1,11 @@
 import unittest
-from data import load_frame
-from face import _extract_faces, _head_mask, remove_heads_from_mask
-from numpy import testing as nptest
 from os import path
-from paths import TESTING
+
+from extractor.data import load_frame
+from extractor.face import _extract_faces, _head_mask, remove_heads_from_mask
+from numpy import testing as nptest
+
+from .paths import TESTING
 
 
 class TestHeadMask(unittest.TestCase):
@@ -23,6 +25,7 @@ class TestHeadMask(unittest.TestCase):
         expected = load_frame(path.join(TESTING, "night_0_5_mask.png"))
 
         nptest.assert_equal(actual, expected)
+
 
 if __name__ == "__main__":
     unittest.main()
