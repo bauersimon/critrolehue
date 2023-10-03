@@ -2,9 +2,10 @@ import unittest
 from os import path
 from typing import Dict
 
+from numpy import testing as nptest
+
 from extractor.data import load_frame
 from extractor.frames import FrameIterator, ImageFiles, VideoFile, YouTubeVideo
-from numpy import testing as nptest
 
 from .paths import TESTING
 

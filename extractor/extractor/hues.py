@@ -3,7 +3,6 @@ from typing import List, Tuple
 
 import numpy as np
 
-from .data import load_frame
 from .image import apply_mask
 
 
@@ -34,15 +33,23 @@ def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, fl
     return hues
 
 
-def _average_hsv(data: List[Tuple[float, float, float]]) -> Tuple[float, float, float]:
+def _average_hsv(
+        data: List[Tuple[float, float, float]]
+) -> Tuple[float, float, float]:
     return tuple(np.mean(np.array(data), 0))
 
 
-def _deviation_hsv(data: List[Tuple[float, float, float]]) -> Tuple[float, float, float]:
+def _deviation_hsv(
+        data: List[Tuple[float, float, float]]
+) -> Tuple[float, float, float]:
     return tuple(np.std(np.array(data), 0))
 
 
-def extract_color(frame: np.array, mask: np.array, brightness_cutoff=0.5) -> Tuple[float, float, float]:
+def extract_color(
+        frame: np.array,
+        mask: np.array,
+        brightness_cutoff=0.5
+) -> Tuple[float, float, float]:
     """Extract HSV colors from the given frame, respecting the given mask."""
 
     colors = _extract_hsv(frame, mask)

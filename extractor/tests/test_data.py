@@ -1,8 +1,9 @@
 import unittest
 from os import path
 
-from extractor.data import get_frame, load_frame
 from numpy import testing as nptest
+
+from extractor.data import get_frame, load_frame
 
 from .paths import TESTING
 

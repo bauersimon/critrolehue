@@ -1,0 +1,18 @@
+{
+    "include": [
+        "extractor/",
+        "tests/"
+    ],
+    "exclude": [
+        "venv"
+    ],
+    "strict": [
+        "extractor/",
+        "tests/"
+    ],
+    "venvPath": ".",
+    "venv": "venv",
+    "pythonVersion": "3.11",
+    "pythonPlatform": "Linux",
+    "typeCheckingMode": "strict",
+}

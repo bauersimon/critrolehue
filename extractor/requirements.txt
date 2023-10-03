@@ -6,3 +6,5 @@ sewar
 
 autopep8
 isort
+ruff
+pyright

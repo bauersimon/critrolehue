@@ -4,7 +4,6 @@ from typing import List, Tuple
 import cv2
 import numpy as np
 
-from .data import load_frame, save_frame, show_frame
 from .image import subtract_mask
 from .paths import ROOT
 
@@ -24,7 +23,12 @@ def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
     return faces
 
 
-def _head_mask(faces: List[Tuple[int, int, int, int]], height: int, width: int, radius_factor: float) -> np.array:
+def _head_mask(
+        faces: List[Tuple[int, int, int, int]],
+        height: int,
+        width: int,
+        radius_factor: float
+) -> np.array:
     # pylint: disable=no-member
     mask = np.zeros((height, width, 3))
     for (x, y, w, h) in faces:
@@ -41,7 +45,11 @@ def _head_mask(faces: List[Tuple[int, int, int, int]], height: int, width: int, 
     return mask
 
 
-def remove_heads_from_mask(frame: np.array, mask: np.array, head_radius=0.8) -> np.array:
+def remove_heads_from_mask(
+        frame: np.array,
+        mask: np.array,
+        head_radius=0.8
+) -> np.array:
     faces = _extract_faces(frame)
     height = frame.shape[0]
     width = frame.shape[1]

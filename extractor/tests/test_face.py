@@ -1,9 +1,10 @@
 import unittest
 from os import path
 
+from numpy import testing as nptest
+
 from extractor.data import load_frame
 from extractor.face import _extract_faces, _head_mask, remove_heads_from_mask
-from numpy import testing as nptest
 
 from .paths import TESTING
 

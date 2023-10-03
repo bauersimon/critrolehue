@@ -12,7 +12,12 @@ def subtract_mask(mask_0: np.array, mask_1: np.array) -> np.array:
     return np.where(mask > 0, mask, np.zeros_like(mask))
 
 
-def similar_image(img_0: np.array, img_1: np.array, mask: np.array = None, blur: int = 0) -> float:
+def similar_image(
+    img_0: np.array,
+    img_1: np.array,
+    mask: np.array = None,
+    blur: int = 0
+) -> float:
     # pylint: disable=no-member
     if mask is not None:
         img_0 = apply_mask(img_0, mask)
