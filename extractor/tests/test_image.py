@@ -1,8 +1,8 @@
 import unittest
 from os import path
 
-from extractor.data import load_frame
 from extractor.image import similar_image
+from extractor.io import load_frame
 from extractor.paths import FRAMES
 
 from .paths import TESTING

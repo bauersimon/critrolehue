@@ -1,52 +1,108 @@
-import cv2
-import numpy as np
-from matplotlib import pyplot as plt
+from abc import ABC, abstractmethod
+from os import path
+from tempfile import TemporaryDirectory
+from typing import Dict, Union
+
+import numpy.typing as npt
+from yt_dlp import YoutubeDL
+
+from .io import get_frame, load_frame, video_length
 
 
-def get_frame(file: str, second: float) -> np.array:
-    """
-    Extract a frame at the given second from the given video file.
+class FrameGenerator(ABC):
+    @abstractmethod
+    def get_frame(self, second: float) -> npt.NDArray:
+        """Obtain a frame at a certain time point."""
+        pass
 
-    Returns an `ndarray` of the shape: `(<height>,<width>,3)`.
-    """
-    # pylint: disable=no-member
-
-    video = cv2.VideoCapture(file)
-    ms = 1000*float(second)
-    video.set(cv2.CAP_PROP_POS_MSEC, ms)
-    success, frame = video.read()
-    if not success:
-        raise Exception(f"could not extract frame at {second}s in {file}")
-
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    return np.array(frame)
+    @property
+    @abstractmethod
+    def length(self) -> float:
+        pass
 
 
-def video_length(file: str) -> float:
-    # pylint: disable=no-member
-    video = cv2.VideoCapture(file)
-    fps = video.get(cv2.CAP_PROP_FPS)
-    frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
-    return frame_count / fps
+class VideoFile(FrameGenerator):
+    _file: str
+    _length: float
+
+    def __init__(self, file: str):
+        self._file = file
+        self._length = video_length(file)
+
+    def get_frame(self, second: float) -> npt.NDArray:
+        """Obtain a frame at a certain time point."""
+        return get_frame(self._file, second)
+
+    @property
+    def length(self) -> float:
+        return self._length
 
 
-def show_frame(frame: np.array):
-    # pylint: disable=no-member
+class ImageFiles(FrameGenerator):
+    _files: Dict[float, str]
 
-    plt.imshow(frame)
-    plt.show()
+    def __init__(self, files: Dict[float, str]):
+        self._files = files
+
+    def get_frame(self, second: float) -> npt.NDArray:
+        """Obtain a frame at a certain time point."""
+        file = self._files.get(second, None)
+        if not file:
+            raise Exception(f"no frame for {second}s")
+        return load_frame(file)
+
+    @property
+    def length(self) -> float:
+        return max(self._files.keys())
 
 
-def save_frame(file: str, frame: np.array):
-    # pylint: disable=no-member
+_formats = {
+    "sd": "396",
+    "hd": "398",
+    "fullhd": "399",
+}
 
-    frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-    cv2.imwrite(file, frame)
 
+class YouTubeVideo(FrameGenerator):
+    _url: str
+    _format: str
+    _length: float
 
-def load_frame(file: str) -> np.array:
-    # pylint: disable=no-member
+    def __init__(self, url: str, quality: str = 'hd'):
+        self._url = url
+        self._format = _formats[quality]
 
-    frame = cv2.imread(file)
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    return np.array(frame)
+        with YoutubeDL({"quiet": True}) as yt:
+            info = yt.extract_info(url, download=False)
+            if info is None:
+                raise Exception("url {url} not found")
+            self._length = float(info["duration"])
+
+    def get_frame(self, second: float) -> Union[npt.NDArray, None]:
+        if second > self._length - 0.1:
+            return None
+
+        def section(*args, **kwargs): return [{
+            "start_time": second - 0.1,
+            "end_time": second + 0.1,
+        }]
+
+        with TemporaryDirectory() as temp:
+            yt = YoutubeDL({
+                "format": self._format,
+                "download_ranges": section,
+                "force_keyframes_at_cuts": True,
+                "paths": {
+                    "home": temp,
+                },
+                "outtmpl": "download.mp4",
+                "quiet": True,
+            })
+
+            yt.download([self._url])
+
+            return get_frame(path.join(temp, "download.mp4"), 0.1)
+
+    @property
+    def length(self) -> float:
+        return self._length

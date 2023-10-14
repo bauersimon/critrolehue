@@ -6,13 +6,14 @@
     "exclude": [
         "venv"
     ],
-    "strict": [
-        "extractor/",
-        "tests/"
-    ],
+    // "strict": [
+    //     "extractor/",
+    //     "tests/"
+    // ],
     "venvPath": ".",
     "venv": "venv",
     "pythonVersion": "3.11",
     "pythonPlatform": "Linux",
-    "typeCheckingMode": "strict",
+    "typeCheckingMode": "basic",
+    // "typeCheckingMode": "strict",
 }

@@ -1,17 +1,17 @@
 from os import path
-from typing import List, Tuple
+from typing import Sequence
 
 import cv2
+import cv2.typing as cvt
 import numpy as np
+import numpy.typing as npt
 
 from .image import subtract_mask
 from .paths import ROOT
 
 
-def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
+def _extract_faces(frame: npt.NDArray) -> Sequence[cvt.Rect]:
     """Extract a list of `(x,y,w,h)`."""
-    # pylint: disable=no-member
-
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
     classifier = cv2.CascadeClassifier(path.join(ROOT, 'face_model.xml'))
     faces = classifier.detectMultiScale(
@@ -24,12 +24,12 @@ def _extract_faces(frame: np.array) -> List[Tuple[int, int, int, int]]:
 
 
 def _head_mask(
-        faces: List[Tuple[int, int, int, int]],
+        faces: Sequence[cvt.Rect],
         height: int,
         width: int,
         radius_factor: float
-) -> np.array:
-    # pylint: disable=no-member
+) -> npt.NDArray:
+    """Create a mask of the found faces."""
     mask = np.zeros((height, width, 3))
     for (x, y, w, h) in faces:
         center = (int(x + 0.5*w), int(y + 0.4*h))
@@ -46,15 +46,13 @@ def _head_mask(
 
 
 def remove_heads_from_mask(
-        frame: np.array,
-        mask: np.array,
+        frame: npt.NDArray,
+        mask: npt.NDArray,
         head_radius=0.8
-) -> np.array:
+) -> npt.NDArray:
     faces = _extract_faces(frame)
     height = frame.shape[0]
     width = frame.shape[1]
     head_mask = _head_mask(faces, height, width, head_radius)
 
     return subtract_mask(mask, head_mask)
-
-    return mask

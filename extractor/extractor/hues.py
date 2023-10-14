@@ -1,22 +1,25 @@
 from colorsys import rgb_to_hsv
-from typing import List, Tuple
 
 import numpy as np
+import numpy.typing as npt
 
 from .image import apply_mask
 
 
-def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, float]]:
+def _extract_hsv(
+    frame: npt.NDArray,
+    mask: npt.NDArray,
+) -> list[tuple[float, float, float]]:
     """
     Extract colors from the given frame, respecting the given mask.
 
-    frame: np.array
+    frame: npt.NDArray
         Shape of `(<height>,<width>,3)` with RGB channels.
-    mask: np.array
+    mask: npt.NDArray
         Shape of `(<height>,<width>,3)` with black/white RGB channels.
 
-    returns: List[Tuple[float, float, float]]
-        List of `(hue, saturation, value)` of length #(pixels included in the mask).
+    returns: list[tuple[float, float, float]]
+        list of `(hue, saturation, value)` of length #(pixels included in the mask).
     """
 
     frame = apply_mask(frame, mask)
@@ -26,7 +29,8 @@ def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, fl
 
     frame = frame/255
 
-    hues = np.reshape(frame, (height*width, 3)).tolist()
+    hues: list[tuple[float, float, float]] = np.reshape(
+        frame, (height*width, 3)).tolist()
     hues = list(filter(lambda rgb: not rgb[0] == rgb[1] == rgb[2] == 0, hues))
     hues = list(map(lambda rgb: rgb_to_hsv(*rgb), hues))
 
@@ -34,22 +38,30 @@ def _extract_hsv(frame: np.array, mask: np.array) -> List[Tuple[float, float, fl
 
 
 def _average_hsv(
-        data: List[Tuple[float, float, float]]
-) -> Tuple[float, float, float]:
-    return tuple(np.mean(np.array(data), 0))
+        data: list[tuple[float, float, float]]
+) -> tuple[float, float, float]:
+    hsv: list[float] = np.mean(np.array(data), 0).tolist()
+    if len(hsv) == 3:
+        t: tuple[float, float, float] = (hsv[0], hsv[1], hsv[2])
+        return t
+    return (0.0, 0.0, 0.0)
 
 
 def _deviation_hsv(
-        data: List[Tuple[float, float, float]]
-) -> Tuple[float, float, float]:
-    return tuple(np.std(np.array(data), 0))
+        data: list[tuple[float, float, float]]
+) -> tuple[float, float, float]:
+    hsv: list[float] = np.std(np.array(data), 0).tolist()
+    if len(hsv) == 3:
+        t: tuple[float, float, float] = (hsv[0], hsv[1], hsv[2])
+        return t
+    return (0.0, 0.0, 0.0)
 
 
 def extract_color(
-        frame: np.array,
-        mask: np.array,
+        frame: npt.NDArray,
+        mask: npt.NDArray,
         brightness_cutoff=0.5
-) -> Tuple[float, float, float]:
+) -> tuple[float, float, float]:
     """Extract HSV colors from the given frame, respecting the given mask."""
 
     colors = _extract_hsv(frame, mask)
