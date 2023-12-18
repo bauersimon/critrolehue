@@ -3,7 +3,7 @@ from colorsys import rgb_to_hsv
 import numpy as np
 import numpy.typing as npt
 
-from .image import apply_mask
+from . import image
 
 
 def _extract_hsv(
@@ -22,7 +22,7 @@ def _extract_hsv(
         list of `(hue, saturation, value)` of length #(pixels included in the mask).
     """
 
-    frame = apply_mask(frame, mask)
+    frame = image.apply_mask(frame, mask)
 
     height = frame.shape[0]
     width = frame.shape[1]

@@ -3,7 +3,7 @@ from os import path
 
 from numpy import testing as nptest
 
-from extractor.io import get_frame, load_frame
+from extractor import io
 
 from .paths import TESTING
 
@@ -11,8 +11,8 @@ from .paths import TESTING
 class TestGetFrame(unittest.TestCase):
     @staticmethod
     def validate(file: str, second: float, expected: str):
-        actual_frame = get_frame(file, second)
-        expected_frame = load_frame(expected)
+        actual_frame = io.get_frame(file, second)
+        expected_frame = io.load_frame(expected)
         nptest.assert_equal(actual_frame, expected_frame)
 
     def test_night_0_0(self):

@@ -6,7 +6,7 @@ from typing import Dict, Union
 import numpy.typing as npt
 from yt_dlp import YoutubeDL
 
-from .io import get_frame, load_frame, video_length
+from . import io
 
 
 class FrameGenerator(ABC):
@@ -24,11 +24,11 @@ class FrameGenerator(ABC):
 class VideoFile(FrameGenerator):
     def __init__(self, file: str):
         self._file = file
-        self._length = video_length(file)
+        self._length = io.video_length(file)
 
     def get_frame(self, second: float) -> npt.NDArray:
         """Obtain a frame at a certain time point."""
-        return get_frame(self._file, second)
+        return io.get_frame(self._file, second)
 
     @property
     def length(self) -> float:
@@ -44,7 +44,7 @@ class ImageFiles(FrameGenerator):
         file = self._files.get(second, None)
         if not file:
             raise Exception(f"no frame for {second}s")
-        return load_frame(file)
+        return io.load_frame(file)
 
     @property
     def length(self) -> float:
@@ -97,7 +97,7 @@ class YouTubeVideo(FrameGenerator):
 
             yt.download([self._url])
 
-            return get_frame(path.join(temp, "download.mp4"), 0.1)
+            return io.get_frame(path.join(temp, "download.mp4"), 0.1)
 
     @property
     def length(self) -> float:

@@ -6,14 +6,13 @@ import cv2.typing as cvt
 import numpy as np
 import numpy.typing as npt
 
-from .image import subtract_mask
-from .paths import ROOT
+from . import image, paths
 
 
 def _extract_faces(frame: npt.NDArray) -> Sequence[cvt.Rect]:
     """Extract a list of `(x,y,w,h)`."""
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-    classifier = cv2.CascadeClassifier(path.join(ROOT, 'face_model.xml'))
+    classifier = cv2.CascadeClassifier(path.join(paths.ROOT, 'face_model.xml'))
     faces = classifier.detectMultiScale(
         image=frame,
         scaleFactor=1.1,
@@ -55,4 +54,4 @@ def remove_heads_from_mask(
     width = frame.shape[1]
     head_mask = _head_mask(faces, height, width, head_radius)
 
-    return subtract_mask(mask, head_mask)
+    return image.subtract_mask(mask, head_mask)

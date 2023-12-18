@@ -1,8 +1,7 @@
 import unittest
 from os import path
 
-from extractor.hue import extract_color
-from extractor.io import load_frame
+from extractor import hue, io
 
 from .paths import TESTING
 
@@ -11,9 +10,9 @@ class TestExtractColor(unittest.TestCase):
     def validate(
         self, frame_path: str, mask_path: str, expected: tuple[float, float, float]
     ):
-        frame = load_frame(frame_path)
-        mask = load_frame(mask_path)
-        actual = extract_color(frame, mask)
+        frame = io.load_frame(frame_path)
+        mask = io.load_frame(mask_path)
+        actual = hue.extract_color(frame, mask)
 
         self.assertAlmostEqual(actual[0], expected[0], delta=0.01)
         self.assertAlmostEqual(actual[1], expected[1], delta=0.01)
