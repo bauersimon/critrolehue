@@ -22,9 +22,6 @@ class FrameGenerator(ABC):
 
 
 class VideoFile(FrameGenerator):
-    _file: str
-    _length: float
-
     def __init__(self, file: str):
         self._file = file
         self._length = video_length(file)
@@ -39,8 +36,6 @@ class VideoFile(FrameGenerator):
 
 
 class ImageFiles(FrameGenerator):
-    _files: Dict[float, str]
-
     def __init__(self, files: Dict[float, str]):
         self._files = files
 
@@ -64,11 +59,7 @@ _formats = {
 
 
 class YouTubeVideo(FrameGenerator):
-    _url: str
-    _format: str
-    _length: float
-
-    def __init__(self, url: str, quality: str = 'hd'):
+    def __init__(self, url: str, quality: str = "hd"):
         self._url = url
         self._format = _formats[quality]
 

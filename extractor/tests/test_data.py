@@ -12,9 +12,6 @@ from .paths import TESTING
 
 
 class TestFrameIterator():
-    _generator: FrameGenerator
-    _stepsize: float
-
     def __init__(self, gen: FrameGenerator, stepsize: float = 1.0) -> None:
         self._generator = gen
         self._stepsize = stepsize
