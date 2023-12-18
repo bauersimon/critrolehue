@@ -4,7 +4,7 @@ env:
   IS_CI: 1
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
