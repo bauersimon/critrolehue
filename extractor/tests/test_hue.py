@@ -1,7 +1,7 @@
 import unittest
 from os import path
 
-from extractor.hues import extract_color
+from extractor.hue import extract_color
 from extractor.io import load_frame
 
 from .paths import TESTING
@@ -9,10 +9,7 @@ from .paths import TESTING
 
 class TestExtractColor(unittest.TestCase):
     def validate(
-        self,
-        frame_path: str,
-        mask_path: str,
-        expected: tuple[float, float, float]
+        self, frame_path: str, mask_path: str, expected: tuple[float, float, float]
     ):
         frame = load_frame(frame_path)
         mask = load_frame(mask_path)
