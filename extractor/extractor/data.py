@@ -73,22 +73,27 @@ class YouTubeVideo(FrameGenerator):
         if second > self._length - 0.1:
             return None
 
-        def section(*args, **kwargs): return [{
-            "start_time": second - 0.1,
-            "end_time": second + 0.1,
-        }]
+        def section(*args, **kwargs):
+            return [
+                {
+                    "start_time": second - 0.1,
+                    "end_time": second + 0.1,
+                }
+            ]
 
         with TemporaryDirectory() as temp:
-            yt = YoutubeDL({
-                "format": self._format,
-                "download_ranges": section,
-                "force_keyframes_at_cuts": True,
-                "paths": {
-                    "home": temp,
-                },
-                "outtmpl": "download.mp4",
-                "quiet": True,
-            })
+            yt = YoutubeDL(
+                {
+                    "format": self._format,
+                    "download_ranges": section,
+                    "force_keyframes_at_cuts": True,
+                    "paths": {
+                        "home": temp,
+                    },
+                    "outtmpl": "download.mp4",
+                    "quiet": True,
+                }
+            )
 
             yt.download([self._url])
 
