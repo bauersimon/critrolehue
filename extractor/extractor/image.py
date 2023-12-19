@@ -21,6 +21,7 @@ def similar_image(
     mask: Optional[npt.NDArray] = None,
     blur: int = 0
 ) -> float:
+    """Compare two images using the Universal Quality Index (UQI). (Higher is better.)"""
     if mask is not None:
         img_0 = apply_mask(img_0, mask)
         img_1 = apply_mask(img_1, mask)

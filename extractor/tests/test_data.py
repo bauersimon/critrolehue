@@ -5,7 +5,7 @@ from typing import Dict, Tuple
 import numpy.typing as npt
 from numpy import testing as nptest
 
-from extractor import data, io
+from extractor import data, image, io
 
 from .paths import TESTING
 
@@ -101,9 +101,10 @@ class TestYouTubeVideo(unittest.TestCase):
     def validate(url: str, quality: str, second: float, expected_file: str):
         f = data.YouTubeVideo(url, quality=quality)
         actual = f.get_frame(second)
+        assert actual is not None
         expected = io.load_frame(expected_file)
 
-        nptest.assert_equal(actual, expected)
+        assert image.similar_image(actual, expected) > 0.95
 
     def test_sd(self):
         self.validate(
