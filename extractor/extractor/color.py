@@ -57,6 +57,14 @@ def _deviation_hsv(
     return (0.0, 0.0, 0.0)
 
 
+class Color:
+    def __init__(self, brightness_cutoff=0.5):
+        self._brightness_cutoff = brightness_cutoff
+
+    def extract(self, frame: npt.NDArray, mask: npt.NDArray) -> tuple[float, float, float]:
+        return extract_color(frame, mask, self._brightness_cutoff)
+
+
 def extract_color(
         frame: npt.NDArray,
         mask: npt.NDArray,
