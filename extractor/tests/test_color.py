@@ -33,5 +33,28 @@ class TestExtractColor(unittest.TestCase):
         )
 
 
+class TestHueToTemperature(unittest.TestCase):
+    def test_warm(self):
+        self.assertAlmostEqual(
+            color.hue_to_temperature(0.0, 1, 1),  # Red.
+            1667.0,  # Warm.
+            delta=100,
+        )
+
+    def test_neutral(self):
+        self.assertAlmostEqual(
+            color.hue_to_temperature(0.0, 0.0, 1),  # White.
+            6300,  # Warm.
+            delta=100,
+        )
+
+    def test_cold(self):
+        self.assertAlmostEqual(
+            color.hue_to_temperature(0.66, 1, 1),  # Blue.
+            25000,  # Warm.
+            delta=100,
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

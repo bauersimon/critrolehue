@@ -1,7 +1,9 @@
-from colorsys import rgb_to_hsv
+import warnings
+from colorsys import hsv_to_rgb, rgb_to_hsv
 
 import numpy as np
 import numpy.typing as npt
+from colour import RGB_to_XYZ, XYZ_to_xy, xy_to_CCT
 
 from . import image
 
@@ -61,8 +63,12 @@ class Color:
     def __init__(self, brightness_cutoff=0.5):
         self._brightness_cutoff = brightness_cutoff
 
-    def extract(self, frame: npt.NDArray, mask: npt.NDArray) -> tuple[float, float, float]:
+    def hue(self, frame: npt.NDArray, mask: npt.NDArray) -> tuple[float, float, float]:
         return extract_color(frame, mask, self._brightness_cutoff)
+
+    def temp(self, frame: npt.NDArray, mask: npt.NDArray) -> float:
+        hue = self.hue(frame, mask)
+        return hue_to_temperature(*hue)
 
 
 def extract_color(
@@ -91,3 +97,17 @@ def extract_color(
         return (0.0, 0.0, 0.0)
 
     return _average_hsv(colors)
+
+
+def hue_to_temperature(h: float, s: float, v: float) -> float:
+    rgb = hsv_to_rgb(h, s, v)
+    xyz = RGB_to_XYZ(np.array(rgb), "sRGB")
+    xy = XYZ_to_xy(xyz)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        temp = xy_to_CCT(xy, "kang2002").item()
+
+    temp = max(1667.0, temp)  # Clip at 1667.
+    temp = min(25000.0, temp)  # Clip at 25000.
+
+    return temp

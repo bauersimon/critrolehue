@@ -3,6 +3,7 @@ numpy
 matplotlib
 yt-dlp
 sewar
+colour-science
 
 autopep8
 isort
