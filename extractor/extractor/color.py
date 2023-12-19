@@ -1,4 +1,5 @@
 import warnings
+from abc import ABC
 from colorsys import hsv_to_rgb, rgb_to_hsv
 
 import numpy as np
@@ -59,7 +60,15 @@ def _deviation_hsv(
     return (0.0, 0.0, 0.0)
 
 
-class Color:
+class AbstractColor(ABC):
+    def hue(self, frame: npt.NDArray, mask: npt.NDArray) -> tuple[float, float, float]:
+        raise NotImplementedError
+
+    def temp(self, frame: npt.NDArray, mask: npt.NDArray) -> float:
+        raise NotImplementedError
+
+
+class Color(AbstractColor):
     def __init__(self, brightness_cutoff=0.5):
         self._brightness_cutoff = brightness_cutoff
 

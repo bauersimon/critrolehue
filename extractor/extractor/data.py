@@ -13,12 +13,12 @@ class FrameGenerator(ABC):
     @abstractmethod
     def get_frame(self, second: float) -> npt.NDArray:
         """Obtain a frame at a certain time point."""
-        pass
+        raise NotImplementedError
 
     @property
     @abstractmethod
     def length(self) -> float:
-        pass
+        raise NotImplementedError
 
 
 class VideoFile(FrameGenerator):
