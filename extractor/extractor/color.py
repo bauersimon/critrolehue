@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 from colour import RGB_to_XYZ, XYZ_to_xy, xy_to_CCT
 
-from . import image
+from . import image, model
 
 
 def _extract_hsv(
@@ -67,10 +67,17 @@ class AbstractColor(ABC):
     def temp(self, frame: npt.NDArray, mask: npt.NDArray) -> float:
         raise NotImplementedError
 
+    def similar(self, c1: model.ColorUpdate, c2: model.ColorUpdate) -> bool:
+        raise NotImplementedError
+
 
 class Color(AbstractColor):
-    def __init__(self, brightness_cutoff=0.5):
+    def __init__(self, brightness_cutoff=0.5, hue_threshold=0.1, sat_threshold=0.2, val_threshold=0.2, temp_threshold=1000):
         self._brightness_cutoff = brightness_cutoff
+        self._hue_threshold = hue_threshold
+        self._sat_threshold = sat_threshold
+        self._val_threshold = val_threshold
+        self._temp_threshold = temp_threshold
 
     def hue(self, frame: npt.NDArray, mask: npt.NDArray) -> tuple[float, float, float]:
         return extract_color(frame, mask, self._brightness_cutoff)
@@ -78,6 +85,30 @@ class Color(AbstractColor):
     def temp(self, frame: npt.NDArray, mask: npt.NDArray) -> float:
         hue = self.hue(frame, mask)
         return hue_to_temperature(*hue)
+
+    def similar(self, c1: model.ColorUpdate, c2: model.ColorUpdate) -> bool:
+        if len(c1._colors) != len(c2._colors):
+            raise Exception("ColorUpdate colors have different lengths.")
+        elif len(c1._temps) != len(c2._temps):
+            raise Exception("ColorUpdate temps have different lengths.")
+
+        for i in range(len(c1._colors)):
+            h, s, v = c1._colors[i]
+            h2, s2, v2 = c2._colors[i]
+            if abs(h - h2) > self._hue_threshold:
+                return False
+            elif abs(s - s2) > self._sat_threshold:
+                return False
+            elif abs(v - v2) > self._val_threshold:
+                return False
+
+        for i in range(len(c1._temps)):
+            t = c1._temps[i]
+            t2 = c2._temps[i]
+            if abs(t - t2) > self._temp_threshold:
+                return False
+
+        return True
 
 
 def extract_color(

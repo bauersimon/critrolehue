@@ -1,7 +1,7 @@
 import unittest
 from os import path
 
-from extractor import color, io
+from extractor import color, io, model
 
 from .paths import TESTING
 
@@ -54,6 +54,45 @@ class TestHueToTemperature(unittest.TestCase):
             25000,  # Warm.
             delta=100,
         )
+
+
+class TestSimilar(unittest.TestCase):
+    def setUp(self):
+        self.c = color.Color()
+        pass
+
+    def test_similar(self):
+        colors1 = [(0.1, 0.2, 0.3), (0.4, 0.5, 0.6)]
+        temps1 = [3000.0, 4000.0]
+        colors2 = [(0.11, 0.21, 0.31), (0.41, 0.51, 0.61)]
+        temps2 = [3100.0, 4100.0]
+
+        update1 = model.ColorUpdate(colors1, temps1)
+        update2 = model.ColorUpdate(colors2, temps2)
+
+        self.assertTrue(self.c.similar(update1, update2))
+
+    def test_different_color(self):
+        colors1 = [(0.1, 0.2, 0.3), (0.4, 0.5, 0.6)]
+        temps1 = [3000.0, 4000.0]
+        colors2 = [(0.3, 0.21, 0.31), (0.41, 0.51, 0.61)]
+        temps2 = [3100.0, 4100.0]
+
+        update1 = model.ColorUpdate(colors1, temps1)
+        update2 = model.ColorUpdate(colors2, temps2)
+
+        self.assertFalse(self.c.similar(update1, update2))
+
+    def test_different_temp(self):
+        colors1 = [(0.1, 0.2, 0.3), (0.4, 0.5, 0.6)]
+        temps1 = [3000.0, 4000.0]
+        colors2 = [(0.11, 0.21, 0.31), (0.41, 0.51, 0.61)]
+        temps2 = [4200.0, 4100.0]
+
+        update1 = model.ColorUpdate(colors1, temps1)
+        update2 = model.ColorUpdate(colors2, temps2)
+
+        self.assertFalse(self.c.similar(update1, update2))
 
 
 if __name__ == "__main__":
