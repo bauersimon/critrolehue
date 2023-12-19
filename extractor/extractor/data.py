@@ -63,7 +63,7 @@ class YouTubeVideo(FrameGenerator):
         self._url = url
         self._format = _formats[quality]
 
-        with YoutubeDL({"quiet": True}) as yt:
+        with YoutubeDL({"quiet": True, "no_warnings": True, "noprogress": True}) as yt:
             info = yt.extract_info(url, download=False)
             if info is None:
                 raise Exception("url {url} not found")
@@ -92,6 +92,8 @@ class YouTubeVideo(FrameGenerator):
                     },
                     "outtmpl": "download.mp4",
                     "quiet": True,
+                    "no_warnings": True,
+                    "noprogress": True
                 }
             )
 
