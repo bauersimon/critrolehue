@@ -6,13 +6,14 @@ import cv2.typing as cvt
 import numpy as np
 import numpy.typing as npt
 
-from . import image, paths
+from . import constants, image
 
 
 def _extract_faces(frame: npt.NDArray) -> Sequence[cvt.Rect]:
     """Extract a list of `(x,y,w,h)`."""
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-    classifier = cv2.CascadeClassifier(path.join(paths.ROOT, 'face_model.xml'))
+    classifier = cv2.CascadeClassifier(
+        path.join(constants.ROOT, 'face_model.xml'))
     faces = classifier.detectMultiScale(
         image=frame,
         scaleFactor=1.1,

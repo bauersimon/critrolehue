@@ -3,7 +3,7 @@ from os import path
 
 from extractor import color, io, model
 
-from .paths import TESTING
+from .constants import TESTING
 
 
 class TestExtractColor(unittest.TestCase):

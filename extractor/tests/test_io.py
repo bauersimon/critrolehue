@@ -5,7 +5,7 @@ from numpy import testing as nptest
 
 from extractor import io
 
-from .paths import TESTING
+from .constants import TESTING
 
 
 class TestGetFrame(unittest.TestCase):

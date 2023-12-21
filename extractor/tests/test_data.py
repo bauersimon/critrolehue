@@ -7,7 +7,7 @@ from numpy import testing as nptest
 
 from extractor import data, image, io
 
-from .paths import TESTING
+from .constants import TESTING
 
 
 class TestFrameIterator():

@@ -2,9 +2,9 @@ import unittest
 from os import path
 
 from extractor import image, io
-from extractor.paths import FRAMES
+from extractor.constants import FRAMES
 
-from .paths import TESTING
+from .constants import TESTING
 
 
 class TestSimilarImage(unittest.TestCase):

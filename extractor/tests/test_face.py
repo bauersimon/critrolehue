@@ -5,7 +5,7 @@ from numpy import testing as nptest
 
 from extractor import face, io
 
-from .paths import TESTING
+from .constants import TESTING
 
 
 class TestHeadMask(unittest.TestCase):
