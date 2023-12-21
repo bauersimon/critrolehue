@@ -4,6 +4,7 @@ matplotlib
 yt-dlp
 sewar
 colour-science
+tqdm
 
 autopep8
 isort
