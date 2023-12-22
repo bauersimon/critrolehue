@@ -33,12 +33,18 @@ lint:
 	$(VENV)pyright tests/
 .PHONY: lint
 
-test:
-	$(VENV)python -m unittest discover
+test: clean
+	$(VENV)coverage run -m unittest discover
+	$(VENV)coverage combine
+	$(VENV)coverage report
+	$(VENV)coverage html
+	$(VENV)coverage xml
+	@if [ -z "$(IS_CI)" ]; then xdg-open htmlcov/index.html &> /dev/null; fi
 .PHONY: test
 
 clean:
 	find -name "__pycache__" -exec rm -rv {} +
+	rm -rf .coverage .ruff_cache htmlcov coverage.xml
 .PHONY: clean
 
 uninstall:

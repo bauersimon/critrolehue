@@ -1,5 +1,5 @@
 import logging
-from abc import ABC
+from abc import ABC, abstractmethod
 from multiprocessing import Pool
 
 import numpy.typing as npt
@@ -11,14 +11,17 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractExtractor(ABC):
+    @abstractmethod
     def is_valid(self, frame: npt.NDArray) -> bool:
         """Checks if the frame is valid for the scheme."""
         raise NotImplementedError
 
+    @abstractmethod
     def extract(self, frame: npt.NDArray) -> model.ColorUpdate:
         """Extracts the color from the frame."""
         raise NotImplementedError
 
+    @abstractmethod
     def similar(self, update1: model.ColorUpdate, update2: model.ColorUpdate) -> bool:
         """Checks if the two updates are similar."""
         raise NotImplementedError
@@ -92,11 +95,16 @@ class Search:
         steps = int(self._data.length / self._step)
 
         with Pool(self._workers) as p:
-            return list(
+            updates = list(
                 tqdm.tqdm(p.imap(
                     self._search_step,
                     range(0, int(self._data.length)+1, self._step)
                 ), total=steps, disable=self._quiet))
+
+            p.close()
+            p.join()
+
+            return updates
 
     def _search_compact(self, raw: list[model.ColorUpdate]) -> list[model.ColorUpdate]:
         updates: list[model.ColorUpdate] = []

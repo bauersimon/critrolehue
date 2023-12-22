@@ -25,4 +25,10 @@ jobs:
       - name: Test
         run: make test
         working-directory: ./extractor
+      - name: Coverage 
+        uses: orgoro/coverage@v3.1
+        with:
+          coverageFile: extractor/coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+        if: github.event_name == 'pull_request'
       
