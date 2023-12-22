@@ -165,12 +165,17 @@ class Search:
             return self._refine_recursion(first, mid_update)
 
         logger.warning(
-            f"could not refine from {first._timestamp:.2f}s to {second._timestamp:.2f}s")
+            f"could not refine from {first.timestring} to {second.timestring}, color transition might be longer than refinement_accuracy={self._refinement_accuracy:.1f}s")
         return second._timestamp
 
     def search(self) -> list[model.ColorUpdate]:
         """Searches for the color and temperature of the data in a binary-search fashion."""
+        logger.info(f"color extraction pass (every {self._step/60:.1f}min)")
         updates = self._search_raw()
+        logger.debug(f"obtained {len(updates)} color updates")
+        logger.info(
+            f"color refinement pass (down to {self._refinement_accuracy:.1f}s)")
         updates = self._search_compact(updates)
+        logger.debug(f"refined {len(updates)} color updates")
 
         return updates

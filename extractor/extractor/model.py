@@ -1,3 +1,5 @@
+import datetime
+
 
 class ColorUpdate:
     def __init__(self, colors: list[tuple[float, float, float]], temps: list[float], timestamp: float = -1.0):
@@ -9,10 +11,14 @@ class ColorUpdate:
     def set_timestamp(self, timestamp: float):
         self._timestamp = timestamp
 
+    @property
+    def timestring(self) -> str:
+        return str(datetime.timedelta(seconds=self._timestamp))
+
     def __str__(self) -> str:
         if self._invalid:
-            return f"{self._timestamp:.2f}s: invalid"
-        return f"{self._timestamp:.2f}s: {self._colors} {self._temps}"
+            return f"{self.timestring}: invalid"
+        return f"{self.timestring}: {self._colors} {self._temps}"
 
     def __repr__(self) -> str:
         return self.__str__()

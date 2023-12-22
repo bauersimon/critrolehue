@@ -87,10 +87,16 @@ class Color(AbstractColor):
         return hue_to_temperature(*hue)
 
     def similar(self, c1: model.ColorUpdate, c2: model.ColorUpdate) -> bool:
-        if len(c1._colors) != len(c2._colors):
-            raise Exception("ColorUpdate colors have different lengths.")
+        if c1._invalid != c2._invalid:
+            return False
+        elif c1._invalid:
+            return True
+        elif len(c1._colors) != len(c2._colors):
+            raise Exception(
+                f"ColorUpdate colors have different lengths ({len(c1._colors)} != {len(c2._colors)}).")
         elif len(c1._temps) != len(c2._temps):
-            raise Exception("ColorUpdate temps have different lengths.")
+            raise Exception(
+                f"ColorUpdate temps have different lengths ({len(c1._temps)} != {len(c2._temps)}).")
 
         for i in range(len(c1._colors)):
             h, s, v = c1._colors[i]
