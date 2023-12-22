@@ -127,6 +127,41 @@ class TestSearch(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
+    def test_search_compact(self):
+        generator = TestFrameGenerator(15)
+        extractor = TestExtractor(
+            updates={
+                6: model.ColorUpdate.invalid(),
+                7: model.ColorUpdate([], [7]),
+                14: model.ColorUpdate([], [14]),
+                13: model.ColorUpdate([], [13]),
+            },
+            valid_frames=list(range(0, 16)),
+            similar_frames={
+                7: 8,
+                8: 12,
+                14: 16,
+                13: 14,
+            }
+        )
+        actual = search.Search(extractor, generator,
+                               step=4, workers=1, refinement_accuracy=1.0, quiet=True)._search_compact(
+                                   [
+                                       model.ColorUpdate([], [0], 0.0),
+                                       model.ColorUpdate.invalid(4.0),
+                                       model.ColorUpdate([], [8], 8.0),
+                                       model.ColorUpdate([], [12], 12.0),
+                                       model.ColorUpdate([], [16], 16.0),
+                                   ]
+        )
+        expected = [
+            model.ColorUpdate([], [0], 0.0),
+            model.ColorUpdate([], [8], 7.0),
+            model.ColorUpdate([], [16], 13.0),
+        ]
+
+        self.assertEqual(actual, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

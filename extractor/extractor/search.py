@@ -62,7 +62,7 @@ class Extractor(AbstractExtractor):
 
 
 class Search:
-    def __init__(self, s: AbstractExtractor, d: data.FrameGenerator, step: int = 120, refinement_accuracy: float = 3.0, workers: int = 1, quiet: bool = constants.QUIET):
+    def __init__(self, s: AbstractExtractor, d: data.FrameGenerator, step: int = 120, refinement_accuracy: float = 10.0, workers: int = 1, quiet: bool = constants.QUIET):
         """Extracts the color and temperature of the data in a binary-search fashion."""
         self._scheme = s
         self._data = d
@@ -107,17 +107,66 @@ class Search:
             return updates
 
     def _search_compact(self, raw: list[model.ColorUpdate]) -> list[model.ColorUpdate]:
-        updates: list[model.ColorUpdate] = []
+        to_refine: list[tuple[model.ColorUpdate, model.ColorUpdate]] = []
+        for i in range(1, len(raw)):
+            first = raw[i-1]
+            second = raw[i]
+            if second._invalid:
+                continue
+            elif self._scheme.similar(first, second):
+                continue
+            to_refine.append((first, second))
 
-        for update in raw:
-            if update._invalid:
-                continue
-            if len(updates) > 0 and self._scheme.similar(update, updates[-1]):
-                logger.debug(
-                    f"frame {update._timestamp:.2f}s similar to previous")
-                continue
-            updates.append(update)
+        with Pool(self._workers) as p:
+            refined = list(
+                tqdm.tqdm(p.imap(
+                    self._refine,
+                    to_refine
+                ), total=len(to_refine), disable=self._quiet))
+
+            p.close()
+            p.join()
+
+        updates: list[model.ColorUpdate] = []
+        # Include the first update since it is not part of the refinement.
+        if not raw[0]._invalid:
+            updates.append(raw[0])
+
+        for i in range(len(to_refine)):
+            first, second = to_refine[i]
+            second.set_timestamp(refined[i])
+            updates.append(second)
+
         return updates
+
+    def _refine(self, updates: tuple[model.ColorUpdate, model.ColorUpdate]) -> float:
+        """Computes a more accurate timestamp for the second update."""
+        first, second = updates
+        if first._timestamp >= second._timestamp:
+            raise Exception("First update must be before second update.")
+        elif second._invalid:
+            raise Exception("Second update must be valid.")
+
+        update = self._refine_recursion(first, second)
+        logger.debug(f"refined {second._timestamp:.2f}s to {update:.2f}s")
+        return update
+
+    def _refine_recursion(self, first: model.ColorUpdate, second: model.ColorUpdate) -> float:
+        """Recursively computes a more accurate timestamp for the second update."""
+        if abs(first._timestamp - second._timestamp) < self._refinement_accuracy:
+            return second._timestamp
+
+        mid = (first._timestamp + second._timestamp) / 2
+        mid_update = self._search_step(mid)
+
+        if mid_update._invalid or self._scheme.similar(first, mid_update):
+            return self._refine_recursion(mid_update, second)
+        elif self._scheme.similar(mid_update, second):
+            return self._refine_recursion(first, mid_update)
+
+        logger.warning(
+            f"could not refine from {first._timestamp:.2f}s to {second._timestamp:.2f}s")
+        return second._timestamp
 
     def search(self) -> list[model.ColorUpdate]:
         """Searches for the color and temperature of the data in a binary-search fashion."""

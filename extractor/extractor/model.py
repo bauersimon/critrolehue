@@ -20,6 +20,8 @@ class ColorUpdate:
     def __eq__(self, __value: object) -> bool:
         if not isinstance(__value, ColorUpdate):
             return False
+        elif self._invalid != __value._invalid:
+            return False
         return self._colors == __value._colors and self._temps == __value._temps and self._timestamp == __value._timestamp
 
     @staticmethod
