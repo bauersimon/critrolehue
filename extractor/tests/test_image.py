@@ -2,7 +2,6 @@ import unittest
 from os import path
 
 from extractor import image, io
-from extractor.constants import FRAMES
 
 from .constants import TESTING
 
@@ -24,17 +23,17 @@ class TestSimilarImage(unittest.TestCase):
 
     def test_similar_mask(self):
         img = io.load_frame(path.join(TESTING, "day_0_0.png"))
-        ref = io.load_frame(path.join(FRAMES, "frame_hd.png"))
-        mask = io.load_frame(path.join(FRAMES, "frame_mask_hd.png"))
+        ref = io.load_frame(path.join(TESTING, "frame_hd.png"))
+        mask = io.load_frame(path.join(TESTING, "frame_mask_hd.png"))
         actual = image.similar_image(img, ref, mask)
 
         self.assertGreater(actual, 0.95)
 
     def test_different_mask(self):
         # Use the frame itself as image because it's all-white.
-        img = io.load_frame(path.join(FRAMES, "frame_mask_hd.png"))
-        ref = io.load_frame(path.join(FRAMES, "frame_hd.png"))
-        mask = io.load_frame(path.join(FRAMES, "frame_mask_hd.png"))
+        img = io.load_frame(path.join(TESTING, "frame_mask_hd.png"))
+        ref = io.load_frame(path.join(TESTING, "frame_hd.png"))
+        mask = io.load_frame(path.join(TESTING, "frame_mask_hd.png"))
         actual = image.similar_image(img, ref, mask)
 
         self.assertLess(actual, 0.95)
