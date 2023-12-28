@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <style>
+        li,
+        div {
+            margin: 0.5em;
+        }
+
+        li {
+            background-color: gainsboro;
+            padding: 0.5em;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        span {
+            margin-right: 1em;
+        }
+
+        .colorbox {
+            background-color: black;
+            padding: 1em;
+            padding-left: 2em;
+            padding-right: 2em;
+            margin: 0em;
+            margin-top: -0.1em;
+            margin-bottom: -0.3em;
+            display: inline-block;
+        }
+    </style>
+
+    <div>
+        <h1>critrolehue DEMO</h1>
+
+        <p style="width: 50%;">The timestamps on the right represent color changes of the studio lights. You can click
+            on them to jump to the respective points in the video. Also the current color is marked (and updated) during
+            video playback. The cool thing is that these color informations were extracted automatically. For more
+            information check out the <a href="https://github.com/bauersimon/critrolehue">GitHub Repository</a>.
+            Please note that the color extraction is <em>not real-time</em>.
+        </p>
+        <hr>
+    </div>
+
+    <div style="display: flex;">
+        <div>
+            <iframe id="iframe" width="853" height="505"
+                src="https://www.youtube.com/embed/nEQH5tYMFxk?enablejsapi=1"></iframe>
+        </div>
+        <div>
+            <ul>
+
+                <li onclick="seekTime(675.0)" id="time_675.0">
+                    <span>0:11:15</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(345.772946653308, 53.667587904108494%, 67.53782944182782%);"></div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(292.97277527289, 56.688972263395144%, 33.95869915130113%);"></div>
+
+                    <span></span>
+
+                    <span>temp: 3331.6</span>
+
+                </li>
+
+                <li onclick="seekTime(1773.6328125)" id="time_1773.6328125">
+                    <span>0:29:33</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(26.760727114353383, 54.28246658946818%, 60.84601465397049%);">
+                    </div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(237.02663307864728, 57.25594547978557%, 45.52265834746798%);">
+                    </div>
+
+                    <span></span>
+
+                    <span>temp: 4161.0</span>
+
+                </li>
+
+                <li onclick="seekTime(2925.0)" id="time_2925.0">
+                    <span>0:48:45</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(345.42932898075736, 53.90738857355974%, 68.18426000537198%);">
+                    </div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(289.41591294708365, 59.47591185445056%, 33.444677792277794%);">
+                    </div>
+
+                    <span></span>
+
+                    <span>temp: 3344.2</span>
+
+                </li>
+
+                <li onclick="seekTime(7743.75)" id="time_7743.75">
+                    <span>2:09:03</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(345.8740533774691, 53.83488395421392%, 67.7174628240557%);"></div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(290.3473567843963, 59.178428516014826%, 34.076964813943114%);">
+                    </div>
+
+                    <span></span>
+
+                    <span>temp: 3342.3</span>
+
+                </li>
+
+                <li onclick="seekTime(9236.71875)" id="time_9236.71875">
+                    <span>2:33:56</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(33.54698544385982, 2.9863143907029412%, 78.44972882770122%);">
+                    </div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(300.8286225790056, 38.40672962650317%, 8.649330792174123%);"></div>
+
+                    <span></span>
+
+                    <span>temp: 5141.6</span>
+
+                </li>
+
+                <li onclick="seekTime(10087.5)" id="time_10087.5">
+                    <span>2:48:07</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(11.202616988838146, 61.52854192758954%, 64.86337254901962%);">
+                    </div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(343.56078307204444, 75.31060380675942%, 6.7789536832365505%);">
+                    </div>
+
+                    <span></span>
+
+                    <span>temp: 3323.4</span>
+
+                </li>
+
+                <li onclick="seekTime(12412.5)" id="time_12412.5">
+                    <span>3:26:52</span>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(25.89419714629769, 3.8562984967934963%, 79.10642570281128%);">
+                    </div>
+
+                    <div class="colorbox"
+                        style="background-color: hsl(304.78975726462676, 37.36173759445188%, 8.542092451224178%);">
+                    </div>
+
+                    <span></span>
+
+                    <span>temp: 5147.3</span>
+
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var timeToItems = [
+
+            [675.0, "time_675.0"],
+
+            [1773.6328125, "time_1773.6328125"],
+
+            [2925.0, "time_2925.0"],
+
+            [7743.75, "time_7743.75"],
+
+            [9236.71875, "time_9236.71875"],
+
+            [10087.5, "time_10087.5"],
+
+            [12412.5, "time_12412.5"],
+
+        ];
+
+        var tag = document.createElement('script');
+        tag.id = 'iframe-demo';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('iframe', {
+                events: {
+                    'onReady': onPlayerReady,
+                }
+            });
+        }
+        function onPlayerReady(event) {
+            setInterval(() => {
+                highlightTime();
+            }, 500);
+        }
+        function highlightTime() {
+            var time = player.getCurrentTime();
+
+            timeToItems.forEach((timestamp) => {
+                document.getElementById(timestamp[1]).style.border = "2px solid white";
+            });
+
+            // Find the index that matches the current time.
+            var reversedTimeToItems = timeToItems.toReversed();
+            var idx = reversedTimeToItems.findIndex((timestamp) => {
+                return timestamp[0] < time;
+            });
+            if (idx == -1) {
+                return
+            }
+
+            document.getElementById(reversedTimeToItems[idx][1]).style.border = "2px solid black";
+        }
+        function seekTime(time) {
+            player.seekTo(time, true);
+            player.playVideo();
+        }
+    </script>
+</body>
+
+</html>

@@ -4,7 +4,9 @@ Extract color :rainbow: from the Critical Role set lights.
 
 ![demo picture](demo.jpg)
 
-The goal of this project is to have an automatic way of extracting color from the Critical Role ambient lights.
+> You can try out this demo [live in your browser](https://bauersimon.github.io/critrolehue/).
+
+The goal of this project is to have an automatic way of extracting color from the Critical Role ambient lights. Please note that the color extraction is **not real-time**.
 
 ## Components
 
