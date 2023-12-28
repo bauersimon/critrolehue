@@ -12,10 +12,14 @@ install-apt:
 	sudo apt update && sudo apt install ffmpeg -y
 .PHONY: install-apt
 
-install-venv: uninstall
+install-venv: uninstall-venv
 	python3.11 -m venv venv
 	. venv/bin/activate && pip install -r requirements.txt
 .PHONY: install-venv
+
+uninstall-venv:
+	rm -rf venv
+.PHONY: uninstall-venv
 
 format:
 	$(VENV)autopep8 --in-place --recursive extractor/
@@ -46,7 +50,3 @@ clean:
 	find -name "__pycache__" -exec rm -rv {} +
 	rm -rf .coverage .ruff_cache htmlcov coverage.xml
 .PHONY: clean
-
-uninstall:
-	rm -rf venv
-.PHONY: uninstall
