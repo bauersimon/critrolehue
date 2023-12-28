@@ -5,6 +5,7 @@ yt-dlp
 sewar
 colour-science
 tqdm
+Jinja2
 
 autopep8
 isort

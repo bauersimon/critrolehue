@@ -14,7 +14,7 @@ class ColorUpdate:
 
     @property
     def timestring(self) -> str:
-        return str(datetime.timedelta(seconds=self._timestamp))
+        return str(datetime.timedelta(seconds=self._timestamp)).split(".")[0]
 
     def __str__(self) -> str:
         if self._invalid:

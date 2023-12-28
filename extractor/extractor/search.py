@@ -156,13 +156,18 @@ class Search:
         if abs(first._timestamp - second._timestamp) < self._refinement_accuracy:
             return second._timestamp
 
-        mid = (first._timestamp + second._timestamp) / 2
-        mid_update = self._search_step(mid)
+        for factor in [0.5, 0.25, 0.75, 0.1, 0.9]:
+            mid = first._timestamp + \
+                (second._timestamp-first._timestamp) * factor
+            mid_update = self._search_step(mid)
 
-        if mid_update._invalid or self._scheme.similar(first, mid_update):
-            return self._refine_recursion(mid_update, second)
-        elif self._scheme.similar(mid_update, second):
-            return self._refine_recursion(first, mid_update)
+            if mid_update._invalid or self._scheme.similar(first, mid_update):
+                return self._refine_recursion(mid_update, second)
+            elif self._scheme.similar(mid_update, second):
+                return self._refine_recursion(first, mid_update)
+
+            logger.debug(
+                f"could not refine from {first.timestring} to {second.timestring} with factor {factor}, trying next factor")
 
         logger.warning(
             f"could not refine from {first.timestring} to {second.timestring}, color transition might be longer than refinement_accuracy={self._refinement_accuracy:.1f}s")
