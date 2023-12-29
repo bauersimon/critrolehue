@@ -16,7 +16,7 @@ parser.add_argument("input",
 parser.add_argument("-o", "--output",
                     type=str,
                     default="",
-                    help="Path to the HTML output file.")
+                    help="Path to the HTML output file (attempts to open a browser otherwise).")
 arguments = parser.parse_args()
 
 TEMPLATE = """

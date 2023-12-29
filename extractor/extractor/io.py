@@ -54,7 +54,7 @@ def load_frame(file: str) -> npt.NDArray:
 
 def find_frames(frame_dir: str, quality: str) -> tuple[npt.NDArray, npt.NDArray, list[npt.NDArray], list[npt.NDArray]]:
     """
-    'frame_(mask)_(fullhd|hd|sd).png' define valid frames and '(hue|temp)_<name>_(fullhd|hd|sd).png' define hue/temperature areas (in alphabetic order)
+    `frame_(mask)_(fullhd|hd|sd).png` define valid frames and `(hue|temp)_<name>_(fullhd|hd|sd).png` define hue/temperature areas (in alphabetic order)
 
     Returns a tuple of the form: `(frame_mask, frame, hues, temps)`.
     """

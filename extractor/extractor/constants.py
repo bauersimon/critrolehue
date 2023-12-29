@@ -3,3 +3,9 @@ from os import path
 ROOT = path.dirname(path.abspath(__file__))
 
 QUIET = False
+
+DEFAULT_QUALITY = "hd"
+DEFAULT_SEARCH_STEP = 300
+DEFAULT_REFINEMENT_ACCURACY = 20.0
+DEFAULT_VALID_THRESHOLD = 0.98
+DEFAULT_BRIGHTNESS_CUTOFF = 0.25

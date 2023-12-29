@@ -1,8 +1,7 @@
 import argparse
 import logging
 
-from extractor import color, io, model, search
-from extractor.data import YouTubeVideo
+from extractor import constants, model, pipeline
 
 logging.basicConfig(level=logging.INFO)
 
@@ -31,19 +30,19 @@ parser.add_argument("-w", "--workers",
                     type=int,
                     help="Number of workers to use (default=1).")
 parser.add_argument("-s", "--step",
-                    default=300,
+                    default=constants.DEFAULT_SEARCH_STEP,
                     type=int,
                     help="Initial step size in seconds to extract color updates (default=300s).")
 parser.add_argument("-r", "--accuracy",
-                    default=20.0,
+                    default=constants.DEFAULT_REFINEMENT_ACCURACY,
                     type=float,
                     help="Maximum accuracy of binary search to refine color updates in seconds (default=20s).")
 parser.add_argument("-t", "--threshold",
-                    default=0.98,
+                    default=constants.DEFAULT_VALID_THRESHOLD,
                     type=float,
                     help="Threshold of a valid frame. (default=0.98).")
 parser.add_argument("-c", "--cuttoff",
-                    default=0.25,
+                    default=constants.DEFAULT_BRIGHTNESS_CUTOFF,
                     type=float,
                     help="Brightness cutoff for color extraction. (default=0.25).")
 
@@ -51,24 +50,16 @@ arguments = parser.parse_args()
 if arguments.verbose:
     logging.getLogger().setLevel(logging.DEBUG)
 
-frame_mask, frame, hues, temps = io.find_frames(
-    arguments.frames, arguments.quality)
-
-d = YouTubeVideo(arguments.video, arguments.quality)
-sch = search.Extractor(
-    color.Color(
-        brightness_cutoff=0.25,
-    ),
-    hues,
-    temps,
-    frame_mask,
-    frame,
-    valid_threshold=arguments.threshold
+updates = pipeline.extract_from_youtube_video(
+    arguments.frames,
+    arguments.video,
+    arguments.quality,
+    arguments.cuttoff,
+    arguments.threshold,
+    arguments.step,
+    arguments.workers,
+    arguments.accuracy,
 )
-
-s = search.Search(sch, d, step=arguments.step,
-                  workers=arguments.workers, refinement_accuracy=arguments.accuracy)
-updates = s.search()
 
 with open(arguments.output, "w") as f:
     f.write(model.to_json(updates, arguments.video))
