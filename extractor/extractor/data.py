@@ -53,7 +53,7 @@ class ImageFiles(FrameGenerator):
 
 _formats = {
     "sd": "396",
-    "hd": "398",
+    "hd": "136",
     "fullhd": "399",
 }
 

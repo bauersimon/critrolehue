@@ -1,0 +1,32 @@
+name: Update color values
+
+on:
+  schedule:
+    - cron: '0 20,21 * * 1' # Every Monday at 20:00 and 21:00 (in case the episode is delayed) - converts to 12pm Pacific Time.
+  workflow_dispatch:
+
+jobs:
+  update-color-values:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install Python Dependencies
+        run: pip install -r extractor/requirements.txt
+      - name: Install APT Dependencies
+        uses: awalsh128/cache-apt-pkgs-action@v1.3.0
+        with:
+          packages: ffmpeg
+      - name: Update color values
+        run: python3 critrole_playlist.py https://www.youtube.com/playlist?list=PL1tiwbzkOjQydg3QOkBLG9OYqWJ0dwlxF frames/c3/ ../docs/data/v1/c3/
+        working-directory: ./extractor
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update color values
+          file_pattern: docs/data/*
