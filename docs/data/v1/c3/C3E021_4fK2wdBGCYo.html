@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        li,
+        div {
+            margin: 0.5em;
+        }
+        li {
+            background-color: gainsboro;
+            padding: 0.5em;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        ul {
+            list-style-type: none;
+        }
+        span {
+            margin-right: 1em;
+        }
+        .colorbox {
+            background-color: black;
+            padding: 1em;
+            padding-left: 2em;
+            padding-right: 2em;
+            margin: 0em;
+            margin-top: -0.1em;
+            margin-bottom: -0.3em;
+            display: inline-block;
+        }
+    </style>
+    <div style="display: flex;">
+        <div>
+            <iframe id="iframe" width="853" height="505"
+                src="https://www.youtube.com/embed/4fK2wdBGCYo?enablejsapi=1"></iframe>
+        </div>
+        <div>
+            <ul>
+                
+                <li onclick="seekTime(900)" id="time_900">
+                    <span>0:15:00</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(16.489127697186273, 2.3583796989542685%, 86.94402113176875%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(328.90276088744446, 29.988194677061426%, 20.062698654590665%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5073.0</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(7200)" id="time_7200">
+                    <span>2:00:00</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(141.7655013986946, 5.098837559361512%, 69.90396158463383%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(330.51489963588557, 25.371004553085996%, 27.919213084220473%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5123.5</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(7218.75)" id="time_7218.75">
+                    <span>2:00:18</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(27.379930765988405, 1.9523136236728669%, 88.9966027338629%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(323.0142196487469, 31.188732987935282%, 16.68117343649177%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5059.2</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(9281.25)" id="time_9281.25">
+                    <span>2:34:41</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(25.39273415751684, 2.1596717624329207%, 87.97368488679878%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(319.88751434809814, 30.35265472325645%, 17.297580780063385%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5118.1</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(10350.0)" id="time_10350.0">
+                    <span>2:52:30</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(103.4128269626697, 39.31461938652163%, 88.21905449296285%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(45.09105531516381, 36.36272870240425%, 17.76616158274182%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 3615.0</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(13164.84375)" id="time_13164.84375">
+                    <span>3:39:24</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(188.10177015287107, 23.80468544167971%, 87.18919482686692%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(226.13140214297334, 26.61779471708325%, 10.490222755769368%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5107.2</span>
+                    
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var timeToItems = [
+            
+            [900, "time_900"],
+            
+            [7200, "time_7200"],
+            
+            [7218.75, "time_7218.75"],
+            
+            [9281.25, "time_9281.25"],
+            
+            [10350.0, "time_10350.0"],
+            
+            [13164.84375, "time_13164.84375"],
+            
+        ];
+
+        var tag = document.createElement('script');
+        tag.id = 'iframe-demo';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('iframe', {
+                events: {
+                    'onReady': onPlayerReady,
+                }
+            });
+        }
+        function onPlayerReady(event) {
+            setInterval(() => {
+                highlightTime();
+            }, 500);
+        }
+        function highlightTime() {
+            var time = player.getCurrentTime();
+
+            timeToItems.forEach((timestamp) => {
+                document.getElementById(timestamp[1]).style.border = "2px solid white";
+            });
+
+            // Find the index that matches the current time.
+            var reversedTimeToItems = timeToItems.toReversed();
+            var idx = reversedTimeToItems.findIndex((timestamp) => {
+                return timestamp[0] < time;
+            });
+            if (idx == -1) {
+                return
+            }
+
+            document.getElementById(reversedTimeToItems[idx][1]).style.border = "2px solid black";
+        }
+        function seekTime(time) {
+            player.seekTo(time, true);
+            player.playVideo();
+        }
+    </script>
+</body>
+</html>

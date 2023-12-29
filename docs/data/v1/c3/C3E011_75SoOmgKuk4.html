@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        li,
+        div {
+            margin: 0.5em;
+        }
+        li {
+            background-color: gainsboro;
+            padding: 0.5em;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        ul {
+            list-style-type: none;
+        }
+        span {
+            margin-right: 1em;
+        }
+        .colorbox {
+            background-color: black;
+            padding: 1em;
+            padding-left: 2em;
+            padding-right: 2em;
+            margin: 0em;
+            margin-top: -0.1em;
+            margin-bottom: -0.3em;
+            display: inline-block;
+        }
+    </style>
+    <div style="display: flex;">
+        <div>
+            <iframe id="iframe" width="853" height="505"
+                src="https://www.youtube.com/embed/75SoOmgKuk4?enablejsapi=1"></iframe>
+        </div>
+        <div>
+            <ul>
+                
+                <li onclick="seekTime(768.75)" id="time_768.75">
+                    <span>0:12:48</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(17.382408832215987, 1.7267340032958802%, 93.03496431424078%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(310.6130703377231, 32.91759373266325%, 12.915301372346935%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5176.0</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(2100)" id="time_2100">
+                    <span>0:35:00</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(198.72712166700896, 6.976237667433885%, 69.76749833060154%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(300.09728975170486, 33.978959904786706%, 11.563981042654058%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5246.6</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(2137.5)" id="time_2137.5">
+                    <span>0:35:37</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(18.267972491547965, 1.55038163963966%, 93.72285473329114%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(292.94869013126373, 34.570798937494544%, 11.15003778854534%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5240.0</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(3000)" id="time_3000">
+                    <span>0:50:00</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(138.1320129576411, 6.8803289951070825%, 73.37018028687984%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(289.13203404531635, 44.8972910357208%, 5.960451221289058%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5279.1</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(3018.75)" id="time_3018.75">
+                    <span>0:50:18</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(19.657325455017506, 1.5058800511694357%, 93.07172205752326%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(280.5113976759633, 43.32732111953127%, 6.1138778898097%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5238.6</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(7800)" id="time_7800">
+                    <span>2:10:00</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(144.4496086220382, 5.5481288496361945%, 75.62800220489795%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(291.3768710351858, 38.804904269763334%, 8.228769475007828%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5245.1</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(8568.75)" id="time_8568.75">
+                    <span>2:22:48</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(19.728262596496332, 1.524878531484565%, 93.45213688692627%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(305.02918159545743, 32.969609012991356%, 13.834308214114296%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5198.6</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(11137.5)" id="time_11137.5">
+                    <span>3:05:37</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(33.41205884051281, 45.499984160651266%, 82.71486372326703%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(232.52171541832072, 56.05586259002928%, 58.93702142814586%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 4323.8</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(16396.875)" id="time_16396.875">
+                    <span>4:33:16</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(339.32963249720774, 39.99089987557788%, 86.1596830513027%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(279.6648582181175, 59.16436404152227%, 43.517590599525136%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 3414.0</span>
+                    
+                </li>
+                
+                <li onclick="seekTime(16837.5)" id="time_16837.5">
+                    <span>4:40:37</span>
+                    
+                    <div class="colorbox" style="background-color: hsl(24.352389730272332, 1.443536359873377%, 94.21212361122112%);"></div>
+                    
+                    <div class="colorbox" style="background-color: hsl(304.6496734650076, 31.93795445869358%, 12.726620416842255%);"></div>
+                    
+                    <span></span>
+                    
+                    <span>temp: 5194.7</span>
+                    
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var timeToItems = [
+            
+            [768.75, "time_768.75"],
+            
+            [2100, "time_2100"],
+            
+            [2137.5, "time_2137.5"],
+            
+            [3000, "time_3000"],
+            
+            [3018.75, "time_3018.75"],
+            
+            [7800, "time_7800"],
+            
+            [8568.75, "time_8568.75"],
+            
+            [11137.5, "time_11137.5"],
+            
+            [16396.875, "time_16396.875"],
+            
+            [16837.5, "time_16837.5"],
+            
+        ];
+
+        var tag = document.createElement('script');
+        tag.id = 'iframe-demo';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('iframe', {
+                events: {
+                    'onReady': onPlayerReady,
+                }
+            });
+        }
+        function onPlayerReady(event) {
+            setInterval(() => {
+                highlightTime();
+            }, 500);
+        }
+        function highlightTime() {
+            var time = player.getCurrentTime();
+
+            timeToItems.forEach((timestamp) => {
+                document.getElementById(timestamp[1]).style.border = "2px solid white";
+            });
+
+            // Find the index that matches the current time.
+            var reversedTimeToItems = timeToItems.toReversed();
+            var idx = reversedTimeToItems.findIndex((timestamp) => {
+                return timestamp[0] < time;
+            });
+            if (idx == -1) {
+                return
+            }
+
+            document.getElementById(reversedTimeToItems[idx][1]).style.border = "2px solid black";
+        }
+        function seekTime(time) {
+            player.seekTo(time, true);
+            player.playVideo();
+        }
+    </script>
+</body>
+</html>

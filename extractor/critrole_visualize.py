@@ -181,10 +181,10 @@ arguments = parser.parse_args()
 if os.path.isdir(arguments.input):
     files = []
     for file in os.listdir(arguments.input):
-        files.append(file.replace(".json", ".html"))
-        file = os.path.join(arguments.input, file)
         if not file.endswith(".json"):
             continue
+        files.append(file.replace(".json", ".html"))
+        file = os.path.join(arguments.input, file)
         visualize_colors(file, file.replace(
             ".json", ".html") if arguments.o else "")
     if arguments.o:
