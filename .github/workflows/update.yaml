@@ -26,6 +26,9 @@ jobs:
       - name: Update color values
         run: python3 critrole_playlist.py https://www.youtube.com/playlist?list=PL1tiwbzkOjQydg3QOkBLG9OYqWJ0dwlxF frames/c3/ ../docs/data/v1/c3/
         working-directory: ./extractor
+      - name: Update color vizualizations
+        run: python3 critrole_visualize.py ../docs/data/v1/c3/ -o
+        working-directory: ./extractor
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Update color values

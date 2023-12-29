@@ -1,4 +1,5 @@
 import argparse
+import os
 import subprocess
 import tempfile
 
@@ -6,20 +7,7 @@ import jinja2
 
 from extractor import model
 
-parser = argparse.ArgumentParser(
-    prog="critrole_visualize",
-    description="Visualize color information from Critical Role"
-)
-parser.add_argument("input",
-                    type=str,
-                    help="Path to the color update JSON file.")
-parser.add_argument("-o", "--output",
-                    type=str,
-                    default="",
-                    help="Path to the HTML output file (attempts to open a browser otherwise).")
-arguments = parser.parse_args()
-
-TEMPLATE = """
+TEMPLATE_VISUALIZE = """
 <!DOCTYPE html>
 <html>
 <body>
@@ -127,18 +115,82 @@ TEMPLATE = """
 </html>
 """
 
-with open(arguments.input, "r") as f:
-    url, updates = model.from_json(f.read())
-url = url.replace("watch?v=", "embed/")
 
-environment = jinja2.Environment()
-template = environment.from_string(TEMPLATE)
-rendered = template.render({"url": url, "updates": updates})
+def visualize_colors(input: str, output: str = ""):
+    with open(input, "r") as f:
+        url, updates = model.from_json(f.read())
+    url = url.replace("watch?v=", "embed/")
 
-if arguments.output == "":
-    with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as temp:
-        temp.write(rendered.encode("utf-8"))
-        subprocess.run(["xdg-open", temp.name])
-else:
-    with open(arguments.output, "w") as f:
+    environment = jinja2.Environment()
+    template = environment.from_string(TEMPLATE_VISUALIZE)
+    rendered = template.render({"url": url, "updates": updates})
+
+    if output == "":
+        with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as temp:
+            temp.write(rendered.encode("utf-8"))
+            subprocess.run(["xdg-open", temp.name])
+    else:
+        with open(output, "w") as f:
+            f.write(rendered)
+
+
+TEMPLATE_INDEX = """
+<!DOCTYPE html>
+<html>
+<body>
+    <style>
+        li {
+            margin: 0.5em;
+        }
+        ul {
+            list-style-type: none;
+        }
+    </style>
+    <ul>
+        {% for file in files %}
+        <li><a href="{{file}}">{{file}}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+</body>
+</html>
+"""
+
+
+def visualize_index(files: list[str], index_path: str):
+    environment = jinja2.Environment()
+    template = environment.from_string(TEMPLATE_INDEX)
+    rendered = template.render({"files": files})
+
+    with open(index_path, "w") as f:
         f.write(rendered)
+
+
+parser = argparse.ArgumentParser(
+    prog="critrole_visualize",
+    description="Visualize color information from Critical Role"
+)
+parser.add_argument("input",
+                    type=str,
+                    help="Path to the color update JSON file or directory.")
+parser.add_argument("-o",
+                    action="store_true",
+                    help="Save as HTML output file (attempts to open a browser otherwise).")
+arguments = parser.parse_args()
+
+if os.path.isdir(arguments.input):
+    files = []
+    for file in os.listdir(arguments.input):
+        files.append(file.replace(".json", ".html"))
+        file = os.path.join(arguments.input, file)
+        if not file.endswith(".json"):
+            continue
+        visualize_colors(file, file.replace(
+            ".json", ".html") if arguments.o else "")
+    if arguments.o:
+        files.sort()
+        visualize_index(files, os.path.join(
+            os.path.split(arguments.input)[0], "index.html"))
+else:
+    visualize_colors(arguments.input, arguments.input.replace(
+        ".json", ".html") if arguments.o else "")
