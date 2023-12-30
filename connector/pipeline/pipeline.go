@@ -41,7 +41,7 @@ func Once(provider lights.Provider, timestamper pulse.Timestamper, updates []*mo
 
 	var maxIndex int
 	for _, light := range allLights {
-		index := config.Global.Int(fmt.Sprintf("lights.%s.index", light.ID()))
+		index := config.Global.Int(fmt.Sprintf("setup.%s.index", light.ID()))
 		if index > maxIndex {
 			maxIndex = index
 		}
@@ -52,7 +52,7 @@ func Once(provider lights.Provider, timestamper pulse.Timestamper, updates []*mo
 	tempLights := make([][]lights.Light, maxIndex+1)
 	for _, light := range allLights {
 		var lightType *[][]lights.Light
-		switch config.Global.String(fmt.Sprintf("lights.%s.type", light.ID())) {
+		switch config.Global.String(fmt.Sprintf("setup.%s.type", light.ID())) {
 		case "hue":
 			lightType = &hueLights
 		case "temp":
@@ -61,7 +61,7 @@ func Once(provider lights.Provider, timestamper pulse.Timestamper, updates []*mo
 			continue
 		}
 
-		index := config.Global.Int(fmt.Sprintf("lights.%s.index", light.ID()))
+		index := config.Global.Int(fmt.Sprintf("setup.%s.index", light.ID()))
 		index-- // Indexes are 1-based, but we want to use them as 0-based.
 
 		(*lightType)[index] = append((*lightType)[index], light)

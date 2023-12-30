@@ -25,7 +25,7 @@ func Setup(provider lights.Provider) error {
 			return err
 		} else if answer != "y" {
 			stop()
-			config.Global.Delete(fmt.Sprintf("lights.%s", light.ID()))
+			config.Global.Delete(fmt.Sprintf("setup.%s", light.ID()))
 
 			continue
 		}
@@ -36,13 +36,13 @@ func Setup(provider lights.Provider) error {
 		}
 		switch answer {
 		case "h":
-			config.Global.Set(fmt.Sprintf("lights.%s.type", light.ID()), "hue")
+			config.Global.Set(fmt.Sprintf("setup.%s.type", light.ID()), "hue")
 		case "t":
-			config.Global.Set(fmt.Sprintf("lights.%s.type", light.ID()), "temp")
+			config.Global.Set(fmt.Sprintf("setup.%s.type", light.ID()), "temp")
 		default:
 			fmt.Println("Invalid input. Ignoring this light.")
 			stop()
-			config.Global.Delete(fmt.Sprintf("lights.%s", light.ID()))
+			config.Global.Delete(fmt.Sprintf("setup.%s", light.ID()))
 
 			continue
 		}
@@ -52,8 +52,8 @@ func Setup(provider lights.Provider) error {
 		if _, err := fmt.Scanln(&index); err != nil {
 			return err
 		}
-		config.Global.Set(fmt.Sprintf("lights.%s.index", light.ID()), index)
-		config.Global.Set(fmt.Sprintf("lights.%s.name", light.Name()), index)
+		config.Global.Set(fmt.Sprintf("setup.%s.index", light.ID()), index)
+		config.Global.Set(fmt.Sprintf("setup.%s.name", light.ID()), light.Name())
 
 		stop()
 	}
