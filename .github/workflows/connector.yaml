@@ -1,0 +1,21 @@
+name: Connector
+on: [push, pull_request]
+env:
+  IS_CI: 1
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.5'
+      - name: Install dependencies
+        run: go get .
+        working-directory: ./connector
+      - name: Test Go
+        run: go test ./...
+        working-directory: ./connector
