@@ -25,6 +25,7 @@ func Setup(provider lights.Provider) error {
 			return err
 		} else if answer != "y" {
 			stop()
+			config.Global.Delete(fmt.Sprintf("lights.%s", light.ID()))
 
 			continue
 		}
@@ -41,6 +42,7 @@ func Setup(provider lights.Provider) error {
 		default:
 			fmt.Println("Invalid input. Ignoring this light.")
 			stop()
+			config.Global.Delete(fmt.Sprintf("lights.%s", light.ID()))
 
 			continue
 		}

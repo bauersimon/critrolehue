@@ -127,14 +127,16 @@ func (l *PhilipsHueLight) SetTemperature(temperature float64, transition int) er
 
 // Alert flashes the light briefly.
 func (l *PhilipsHueLight) Alert() (stop func() error, err error) {
+	stateCopy := *l.light.State
+
 	stop = func() error {
-		return l.light.Alert("none")
+		return l.light.SetState(stateCopy)
 	}
 	return stop, l.light.SetState(huego.State{
 		On:             true,
-		Ct:             uint16(200),
+		Ct:             uint16(300),
 		Bri:            uint8(254),
-		TransitionTime: uint16(0),
+		TransitionTime: uint16(1),
 		Alert:          "lselect",
 	})
 }
