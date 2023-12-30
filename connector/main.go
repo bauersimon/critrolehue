@@ -27,6 +27,7 @@ func setup([]string) error {
 func run(args []string) error {
 	flagSet := flag.NewFlagSet("run", flag.ExitOnError)
 	offset := flagSet.Duration("offset", 0.0, "Time offset in seconds")
+	saturation := flagSet.Int("saturation", 0, "Increase saturation by this percentage")
 	delay := flagSet.Int("delay", 1, "Update delay in seconds")
 	transition := flagSet.Float64("transition", 10.0, "Transition time in seconds")
 	url := flagSet.String("url", "", "Video URL")
@@ -37,6 +38,8 @@ func run(args []string) error {
 			return nil
 		}
 		return err
+	} else if *saturation < 0 || *saturation > 100 {
+		return fmt.Errorf("saturation must be between 0 and 100")
 	}
 
 	provider, err := lights.NewPhilipsHueProvider()
@@ -52,6 +55,15 @@ func run(args []string) error {
 	_, updates, err := model.FromJSON(data)
 	if err != nil {
 		return err
+	}
+
+	if *saturation > 0 {
+		for _, update := range updates {
+			for i := range update.Hues {
+				update.Hues[i].Saturation += float64(*saturation) / 100.0
+				update.Hues[i].Saturation = min(update.Hues[i].Saturation, 1.0)
+			}
+		}
 	}
 
 	return pipeline.Once(provider, timestamper, updates, *delay, *transition)
