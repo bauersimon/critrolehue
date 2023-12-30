@@ -24,7 +24,7 @@ jobs:
         with:
           packages: ffmpeg
       - name: Update color values
-        run: python3 critrole_playlist.py https://www.youtube.com/playlist?list=PL1tiwbzkOjQydg3QOkBLG9OYqWJ0dwlxF frames/c3/ ../docs/data/v1/c3/
+        run: python3 critrole_playlist.py -w 2 https://www.youtube.com/playlist?list=PL1tiwbzkOjQydg3QOkBLG9OYqWJ0dwlxF frames/c3/ ../docs/data/v1/c3/
         working-directory: ./extractor
       - name: Update color vizualizations
         run: python3 critrole_visualize.py ../docs/data/v1/c3/ -o
