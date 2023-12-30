@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"strings"
 )
 
 // HTTP is an HTTP data retriever.
@@ -32,7 +33,7 @@ func (r *HTTP) Get(video_url string) ([]byte, error) {
 		return nil, err
 	} else if response.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d", response.StatusCode)
-	} else if response.Header.Get("Content-Type") != "application/json" {
+	} else if !strings.Contains(response.Header.Get("Content-Type"), "application/json") {
 		return nil, fmt.Errorf("unexpected content type: %s", response.Header.Get("Content-Type"))
 	}
 
