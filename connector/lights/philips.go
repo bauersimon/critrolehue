@@ -130,7 +130,13 @@ func (l *PhilipsHueLight) Alert() (stop func() error, err error) {
 	stop = func() error {
 		return l.light.Alert("none")
 	}
-	return stop, l.light.Alert("lselect")
+	return stop, l.light.SetState(huego.State{
+		On:             true,
+		Ct:             uint16(200),
+		Bri:            uint8(254),
+		TransitionTime: uint16(0),
+		Alert:          "lselect",
+	})
 }
 
 // ID returns the unique ID of the light.
