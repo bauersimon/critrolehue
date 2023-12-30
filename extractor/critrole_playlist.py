@@ -3,6 +3,8 @@ import logging
 import os
 import re
 import sys
+from pathlib import Path
+from typing import Union
 
 from yt_dlp import YoutubeDL
 
@@ -15,6 +17,26 @@ def _episode_short_name(name: str) -> str:
         raise Exception(f"Could not parse episode name: {name}")
     campaign, episode = match[0]
     return f"C{campaign}E{int(episode):0>3}"
+
+
+def _relative_symlink(target: Union[Path, str], destination: Union[Path, str]):
+    """Create a symlink pointing to ``target`` from ``location``.
+    Args:
+        target: The target of the symlink (the file/directory that is pointed to)
+        destination: The location of the symlink itself.
+
+    https://gist.github.com/willprice/311faace6fb4f514376fa405d2220615
+    """
+    target = Path(target)
+    destination = Path(destination)
+    target_dir = destination.parent
+    target_dir.mkdir(exist_ok=True, parents=True)
+    relative_source = os.path.relpath(target, target_dir)
+    dir_fd = os.open(str(target_dir.absolute()), os.O_RDONLY)
+    try:
+        os.symlink(relative_source, destination.name, dir_fd=dir_fd)
+    finally:
+        os.close(dir_fd)
 
 
 logging.basicConfig(level=logging.INFO)
@@ -68,6 +90,14 @@ for url, id, name in new_url_id_name:
 
     with open(os.path.join(arguments.output, f"{_episode_short_name(name)}_{id}.json"), "w") as f:
         f.write(model.to_json(updates, url))
+
+    # Create a symlink so the data can be accessed by ID as well.
+    _relative_symlink(
+        os.path.join(arguments.output,
+                     f"{_episode_short_name(name)}_{id}.json"),
+        os.path.join(arguments.output,
+                     f"{id}.json"),
+    )
 
 if len(empty) > 0:
     for error in empty:
