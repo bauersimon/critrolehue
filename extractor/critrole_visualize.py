@@ -181,7 +181,7 @@ arguments = parser.parse_args()
 if os.path.isdir(arguments.input):
     files = []
     for file in os.listdir(arguments.input):
-        if not file.endswith(".json"):
+        if not file.endswith(".json") or os.path.islink(os.path.join(arguments.input, file)):
             continue
         files.append(file.replace(".json", ".html"))
         file = os.path.join(arguments.input, file)
