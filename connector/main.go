@@ -26,7 +26,7 @@ func setup([]string) error {
 
 func run(args []string) error {
 	flagSet := flag.NewFlagSet("run", flag.ExitOnError)
-	offset := flagSet.Duration("offset", 0.0, "Time offset in seconds")
+	offset := flagSet.Duration("offset", 0.0, "Time offset (i.e. 1h43m30s))")
 	saturation := flagSet.Int("saturation", 0, "Increase saturation by this percentage")
 	delay := flagSet.Int("delay", 1, "Update delay in seconds")
 	transition := flagSet.Float64("transition", 20.0, "Transition time in seconds")
