@@ -29,14 +29,10 @@ func run(args []string) error {
 	offset := flagSet.Duration("offset", 0.0, "Time offset in seconds")
 	saturation := flagSet.Int("saturation", 0, "Increase saturation by this percentage")
 	delay := flagSet.Int("delay", 1, "Update delay in seconds")
-	transition := flagSet.Float64("transition", 10.0, "Transition time in seconds")
+	transition := flagSet.Float64("transition", 20.0, "Transition time in seconds")
 	url := flagSet.String("url", "", "Video URL")
 	dataURL := flagSet.String("data", "https://bauersimon.github.io/critrolehue/data/v1/c3/", "Data URL")
 	if err := flagSet.Parse(args); err != nil {
-		if err == flag.ErrHelp {
-			flagSet.PrintDefaults()
-			return nil
-		}
 		return err
 	} else if *saturation < 0 || *saturation > 100 {
 		return fmt.Errorf("saturation must be between 0 and 100")
@@ -75,12 +71,11 @@ var commands = map[string]func([]string) error{
 }
 
 func main() {
-	flagSet := flag.NewFlagSet("global", flag.ExitOnError)
+	flagSet := flag.NewFlagSet("global", flag.ContinueOnError)
 	configPath := flagSet.String("config", "config.json", "Path to config file")
 	if err := flagSet.Parse(os.Args[1:]); err != nil {
 		if err == flag.ErrHelp {
-			fmt.Printf("Available commands:\n\t%s\nGlobal options:\n", strings.Join(maps.Keys(commands), ", "))
-			flagSet.PrintDefaults()
+			fmt.Printf("Available commands:\n\t%s\n", strings.Join(maps.Keys(commands), ", "))
 			return
 		}
 		panic(err)

@@ -120,7 +120,7 @@ func (l *PhilipsHueLight) SetTemperature(temperature float64, transition int) er
 	return l.light.SetState(huego.State{
 		On:             true,
 		Ct:             uint16(temp),
-		Bri:            uint8(254),
+		Bri:            uint8(150), // TODO: Make configurable. Not full brightness for now.
 		TransitionTime: uint16(transition * 10),
 	})
 }
