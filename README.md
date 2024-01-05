@@ -34,6 +34,12 @@ The goal of this project is to have an automatic way of extracting color from th
   - run the `connector` in the terminal and insert URL and timestamp
   - quickly head back to YouTube and resume playback so they don't go out of sync
 - see the "Releases" section for pre-built binaries (only tested on linux)
+- the following commands are available
+  - `setup`: walks you through a setup with your local Philips Hue bridge
+  - `run`: start synchronizing
+    - `--url "http://..."` of the episode (should use quotes so your terminal does not confuse any special characters within the url)
+    - `--offset 01h45m35s` optional starting point
+    - check `run --help` for details
 
 ## Future Ideas
 
