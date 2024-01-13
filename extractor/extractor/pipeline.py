@@ -10,6 +10,7 @@ def extract_from_youtube_video(
     step: int = constants.DEFAULT_SEARCH_STEP,
     workers: int = 1,
     refinement_accuracy: float = constants.DEFAULT_REFINEMENT_ACCURACY,
+    quiet: bool = constants.QUIET,
 ) -> list[model.ColorUpdate]:
     frame_mask, frame, hues, temps = io.find_frames(
         frames_directory, quality)
@@ -27,5 +28,5 @@ def extract_from_youtube_video(
     )
 
     s = search.Search(sch, d, step=step,
-                      workers=workers, refinement_accuracy=refinement_accuracy)
+                      workers=workers, refinement_accuracy=refinement_accuracy, quiet=quiet)
     return s.search()
