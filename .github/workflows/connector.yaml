@@ -1,5 +1,5 @@
 name: Connector
-on: [push, pull_request]
+on: [pull_request]
 env:
   IS_CI: 1
 
