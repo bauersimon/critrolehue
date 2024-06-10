@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import sys
+from nis import cat
 from pathlib import Path
 from typing import Union
 
@@ -73,8 +74,12 @@ existing_episodes: list[str] = list(filter(lambda f: f.endswith(
     ".json"), os.listdir(arguments.output)))
 new_url_id_name: list[tuple[str, str, str]] = []
 for url, id, name in url_id_name:
-    if f"{_episode_short_name(name)}_{id}.json" in existing_episodes:
-        logging.info(f'Skipping "{name}" ({id})')
+    try:
+        if f"{_episode_short_name(name)}_{id}.json" in existing_episodes:
+            logging.info(f'Skipping "{name}" ({id})')
+            continue
+    except Exception as e:
+        logging.error(f'Error processing "{name}" ({id}): {e}')
         continue
 
     new_url_id_name.append((url, id, name))
