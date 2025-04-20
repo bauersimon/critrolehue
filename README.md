@@ -1,3 +1,7 @@
+‼️**With the release of [beacon](https://beacon.tv/), this project would require a complete re-write to support the timestamps from there. Take this as a proof-of-concept.**‼️
+
+---
+
 Extract color :rainbow: from the Critical Role set lights.
 
 ![demo picture](demo.jpg)
